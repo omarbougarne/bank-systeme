@@ -19,7 +19,7 @@ export class Customer {
     phone: string;
 
     @Prop({ required: true, unique: true })
-    balance: number;
+    balance: string;
 
 }
 

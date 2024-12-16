@@ -22,5 +22,5 @@ export class Customer {
     balance: number;
 
 }
-
+export type CustomerDocument = Customer & Document
 export const CustomerSchema = SchemaFactory.createForClass(Customer)

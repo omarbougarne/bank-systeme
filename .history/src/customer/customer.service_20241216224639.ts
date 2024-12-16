@@ -5,7 +5,6 @@ import { Customer } from './schema/customer.schema';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { DepositDto } from './dto/deposit.dto';
 import { CustomerModule } from './customer.module';
-import { WithDrawDto } from './dto/withdraw.dto';
 @Injectable()
 export class CustomerService {
 
@@ -26,21 +25,18 @@ export class CustomerService {
     }
 
     async deposit(depositDto: DepositDto, id): Promise<Customer> {
+        const customer = await this.customerModule.findById(id);
 
-        const customer = await this.customerModule.findByIdAndUpdate(id, depositDto);
-
-
-
-        return customer;
-    }
-
-
-    async withdraw(withDrawDto: WithDrawDto, id): Promise<Customer> {
-        const customer = await this.customerModule.findByIdAndUpdate(id, withDrawDto);
-
+        const balance = customer.balance
 
 
         return customer;
     }
+
+
+    // async withdraw(): Promise<> {
+    //     const amount = 0;
+    //     return amount;
+    // }
 
 }
