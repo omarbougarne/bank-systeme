@@ -9,14 +9,14 @@ export class Customer {
     @Prop({ required: true })
     customerName: string;
 
-    @Prop({ required: true, unique: true })
+    @Prop({ required: true })
     AccountNumber: string;
 
     @Prop({ required: true })
     address: string;
 
-    @Prop({ required: true, unique: true })
-    phone: string;
+    @Prop({ required: true })
+    hone: string;
 
 }
 
