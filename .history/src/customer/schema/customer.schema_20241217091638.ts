@@ -21,10 +21,10 @@ export class Customer {
     @Prop({ required: true, unique: true })
     balance: number;
 
-    @Prop({})
+    @Prop({ required: true, unique: true })
     deposit: number;
 
-    @Prop({})
+    @Prop({ required: true, unique: true })
     withdraw: number;
 
 }

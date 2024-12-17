@@ -12,10 +12,13 @@ export class CustomerService {
     constructor(@InjectModel(Customer.name) private customerModule: Model<Customer>) { }
 
     async createAccount(createCustomer: CreateCustomerDto): Promise<Customer> {
-        const { customerName, AccountNumber, address, phone, balance } = createCustomer
+        const { customerName, AccountNumber, address, phone } = createCustomer
 
         const customer = await this.customerModule.create({
-            createCustomer
+            customerName,
+            AccountNumber,
+            address,
+            phone
 
         })
         await customer.save()
@@ -35,31 +38,7 @@ export class CustomerService {
 
         return newBalance;
     }
-    // const transactionSession = await mongoose.startSession();
-    // transactionSession.startTransaction();
 
-    // try
-    // {
-    //   const newSignupBody: CreateUserDto = {password: hashedPassword, email, username};
-
-    //   const user: User = await this.userService.create(newSignupBody);
-
-    //   //save the profile.
-    //   const profile: Profile = await this.profileService.create(user['Id'], signupDto);
-
-    //   const result:AuthResponseDto = this.getAuthUserResponse(user, profile);
-
-    //   transactionSession.commitTransaction();
-    //   return result;
-    // }
-    // catch(err)
-    // {
-    //   transactionSession.abortTransaction();
-    // }
-    // finally
-    // {
-    //   transactionSession.endSession();
-    // }
 
     async withdraw(withDrawDto: WithDrawDto, id): Promise<Customer> {
         const customer = await this.customerModule.findByIdAndUpdate(id, withDrawDto);
