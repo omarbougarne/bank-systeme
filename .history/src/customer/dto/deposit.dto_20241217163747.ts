@@ -7,6 +7,4 @@ export class DepositDto {
     @IsNumber()
     deposit: number;
 
-    id: string;
-
 }
