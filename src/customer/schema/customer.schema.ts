@@ -6,11 +6,11 @@ import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 
 export class Customer {
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     customerName: string;
 
     @Prop({ required: true, unique: true })
-    AccountNumber: string;
+    accountNo: string;
 
     @Prop({ required: true })
     address: string;
@@ -18,14 +18,8 @@ export class Customer {
     @Prop({ required: true, unique: true })
     phone: string;
 
-    @Prop({ required: true, unique: true })
-    balance: number;
 
-    @Prop({})
-    deposit: number;
 
-    @Prop({})
-    withdraw: number;
 
 }
 

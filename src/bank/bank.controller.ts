@@ -1,4 +1,13 @@
 import { Controller } from '@nestjs/common';
+import { BankService } from './bank.service';
 
 @Controller('bank')
-export class BankController {}
+export class BankController {
+
+    constructor(
+        private bankService: BankService
+    ) { }
+
+
+
+}

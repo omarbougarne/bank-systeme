@@ -22,8 +22,7 @@ export class Bank {
     @Prop({ type: [{ type: Types.ObjectId, ref: 'Customer' }], required: false })
     customerDetails: Customer;
 
-    @Prop({})
-    transaction: [];
+
 
 }
 

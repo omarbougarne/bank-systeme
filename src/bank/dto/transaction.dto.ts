@@ -3,5 +3,6 @@
 export class TransactionDto {
 
     transaction: [];
-    id: string
+    amount: number;
+    id: string;
 }
