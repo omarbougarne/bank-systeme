@@ -5,12 +5,15 @@ import { Customer } from './schema/customer.schema';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { DepositDto } from './dto/deposit.dto';
 import { WithDrawDto } from './dto/withdraw.dto';
-// import { AccountService } from 'src/account/account.service';
+import { BankService } from 'src/bank/bank.service';
+import { AccountService } from 'src/account/account.service';
+import { TransactionDto } from 'src/bank/dto/transaction.dto';
 @Injectable()
 export class CustomerService {
 
     constructor(@InjectModel(Customer.name) private customerModule: Model<Customer>,
-        // private accountService: AccountService
+        private bankService: BankService,
+        private accountService: AccountService
 
     ) { }
 
@@ -29,27 +32,40 @@ export class CustomerService {
         return customer;
     }
 
-    // async deposit({ deposit, id }: DepositDto): Promise<Number> {
+    async deposit({ deposit, idR, idS }: DepositDto, id: TransactionDto): Promise<any> {
 
-    // this.bankService.transaction(deposit, idReceiver, idSender)
-    // this.accountService.updateAccount(this.accountService.checkAccount(id) + deposit);
-    // return this.accountService.checkAccount(id);
-    // }
-    // async deposit({ deposit, id }: DepositDto): Promise<Customer> {
+        const sender = this.accountService.checkAccount(idS);
+        const receiver = this.accountService.checkAccount(idR);
 
-    //     const { balance } = await this.customerModule.findById(id);
-    //     const newBalance = deposit + balance;
-    //     const customer = await this.customerModule.findByIdAndUpdate(id, { balance: newBalance }, { new: true })
+        const trans = this.bankService.transactionDep(id, deposit, sender, receiver)
 
-    //     return customer;
-    // }
+        return trans
+    }
+    async withdraw({ withdraw, idR, idS }: WithDrawDto, id: TransactionDto): Promise<any> {
 
-    // async withdraw({ withdraw, id }: WithDrawDto): Promise<Customer> {
-    // const { balance } = await this.customerModule.findById(id);
-    // const newBalance = balance - withdraw;
-    // const customer = await this.customerModule.findByIdAndUpdate(id, { balance: newBalance }, { new: true })
+        const sender = this.accountService.checkAccount(idS);
+        const receiver = this.accountService.checkAccount(idR);
 
-    // return customer;
-    // }
+        const trans = this.bankService.transactionWith(id, withdraw, sender, receiver)
 
+        return trans
+    }
 }
+// async deposit({ deposit, id }: DepositDto): Promise<Customer> {
+
+//     const { balance } = await this.customerModule.findById(id);
+//     const newBalance = deposit + balance;
+//     const customer = await this.customerModule.findByIdAndUpdate(id, { balance: newBalance }, { new: true })
+
+//     return customer;
+// }
+
+// async withdraw({ withdraw, id }: WithDrawDto): Promise<Customer> {
+// const { balance } = await this.customerModule.findById(id);
+// const newBalance = balance - withdraw;
+// const customer = await this.customerModule.findByIdAndUpdate(id, { balance: newBalance }, { new: true })
+
+// return customer;
+// }
+
+

@@ -16,8 +16,7 @@ import { CustomerService } from 'src/customer/customer.service';
 export class BankService {
 
     constructor(@InjectModel(Bank.name) private bankModule: Model<Bank>,
-        private accountService: AccountService,
-        private customerService: CustomerService
+        private accountService: AccountService
     ) { }
 
 
@@ -38,20 +37,35 @@ export class BankService {
         const collect = await this.bankModule.findByIdAndUpdate(id, { lonDetails: updatedBalance }, { new: true });
         return collect
 
+    }
 
+    async updateDetails(id, balance) {
+        const customer_1 = (await this.accountService.checkAccount(id).findByIdAndUpdate(id, balance)).populate('customerDetails')
+        return { customer_1 }
     }
-    async updateDetails(idR, idS) {
-        const customer_1 = (await this.accountService.checkAccount(idR)).populate('customerDetails')
-        const customer_2 = (await this.accountService.checkAccount(idS)).populate('customerDetails')
-        return { customer_1, customer_2 }
+
+    async transactionDep({ amount }: TransactionDto, idR, idS, balance): Promise<any> {
+        // const loan = this.giveLoan(id, amount)
+        // const collect = this.collectMoney(id, amount)
+        const sender = this.accountService.checkAccount(idS);
+        const receiver = this.accountService.checkAccount(idR);
+
+        // const detailsSender = await this.updateDetails(sender, balance - amount);
+        const detailsReceiver = await this.updateDetails(receiver, balance + amount);
+
+        return { detailsReceiver };
     }
-    async transaction({ id, transaction, amount }: TransactionDto): Promise<number> {
-        this.giveLoan(id, amount)
-        this.collectMoney(id, amount)
-        // this.updateDetails()
-        // Bank({ trans })
-        const trans = 123456789;
-        return trans;
+
+    async transactionWith({ id, transaction, amount }: TransactionDto, idR, idS, balance): Promise<any> {
+        // const loan = this.giveLoan(id, amount)
+        // const collect = this.collectMoney(id, amount)
+        const sender = this.accountService.checkAccount(idS);
+        const receiver = this.accountService.checkAccount(idR);
+
+        const detailsSender = await this.updateDetails(sender, balance - amount);
+        // const detailsReceiver = await this.updateDetails(receiver, balance + amount);
+
+        return { detailsSender };
     }
 
 }

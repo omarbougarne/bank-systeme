@@ -7,5 +7,6 @@ export class WithDrawDto {
     @IsNumber()
     withdraw: number;
 
-    id: string;
+    idR: string;
+    idS: string;
 }
