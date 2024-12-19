@@ -17,6 +17,15 @@ export class CustomerService {
 
     ) { }
 
+    async getCustomers(): Promise<Customer[]> {
+        const customers = await this.customerModule.find()
+        return customers
+    }
+
+    async getCustomer(id): Promise<Customer> {
+        const customer = await this.customerModule.findById(id)
+        return customer
+    }
     async createAccount(createCustomer: CreateCustomerDto): Promise<Customer> {
         const { customerName, AccountNumber, address, phone, balance } = createCustomer
 
@@ -32,8 +41,8 @@ export class CustomerService {
         return customer;
     }
 
-    async deposit({ deposit, idR, idS }: DepositDto, id: TransactionDto): Promise<any> {
-
+    async deposit(depositDto: DepositDto, id: TransactionDto): Promise<any> {
+        const { deposit, idR, idS } = depositDto
         const sender = this.accountService.checkAccount(idS);
         const receiver = this.accountService.checkAccount(idR);
 
@@ -41,8 +50,8 @@ export class CustomerService {
 
         return trans
     }
-    async withdraw({ withdraw, idR, idS }: WithDrawDto, id: TransactionDto): Promise<any> {
-
+    async withdraw(withdrawDto: WithDrawDto, id: TransactionDto): Promise<any> {
+        const { withdraw, idR, idS } = withdrawDto;
         const sender = this.accountService.checkAccount(idS);
         const receiver = this.accountService.checkAccount(idR);
 

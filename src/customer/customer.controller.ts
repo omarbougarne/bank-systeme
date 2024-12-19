@@ -3,6 +3,7 @@ import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { DepositDto } from './dto/deposit.dto';
 import { WithDrawDto } from './dto/withdraw.dto';
+import { TransactionDto } from 'src/bank/dto/transaction.dto';
 
 @Controller('customers')
 export class CustomerController {
@@ -13,8 +14,12 @@ export class CustomerController {
 
 
     @Get('/')
-    getCustomers(@Body() createCustomer: CreateCustomerDto) {
-        return this.customerService.createAccount(createCustomer);
+    getCustomers() {
+        return this.customerService.getCustomers();
+    }
+    @Get('/:id')
+    getCustomer(@Param('id') id) {
+        return this.customerService.getCustomer(id);
     }
 
     @Post('/')
@@ -22,12 +27,22 @@ export class CustomerController {
         return this.customerService.createAccount(createCustomer);
     }
 
-    // @Get('/:id')
-    // getCustumer(@Param('id') id: string, @Body() depoDto: DepositDto) {
-    //     return this.customerService.deposit(depoDto);
-    // }
-    // @Patch('/:id')
-    // updateCustomer(@Param('id') id: string, withDto: WithDrawDto) {
-    //     return this.customerService.withdraw(withDto);
-    // }
+
+    @Post(':id/deposit')
+    async depoistCredit(@Param('id')
+    @Body() depositDto: WithDrawDto,
+        @Body() id: TransactionDto,): Promise<any> {
+
+        return this.customerService.withdraw(depositDto, id)
+    }
+
+    @Post(':id/withdraw')
+    async withDrawCredit(@Param('id')
+    @Body() withdrawDto: WithDrawDto,
+        @Body() id: TransactionDto,): Promise<any> {
+
+        return this.customerService.withdraw(withdrawDto, id)
+    }
+
+
 }
