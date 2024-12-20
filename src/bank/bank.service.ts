@@ -34,7 +34,7 @@ export class BankService {
     }
 
     async updateDetails(id, balance) {
-        const customer_1 = (await this.accountService.checkAccount(id).findByIdAndUpdate(id, balance)).populate('customerDetails')
+        const customer_1 = (await this.accountService.checkAccount(id)?.findByIdAndUpdate(id, { balance }))?.populate('customerDetails')
         return { customer_1 }
     }
 

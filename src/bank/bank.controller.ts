@@ -19,16 +19,15 @@ export class BankController {
     }
 
     @Post(':id/collect')
-    async collectMoney(@Param('id')
-    @Body() amount: number, id: string): Promise<Bank> {
+    async collectMoney(@Param('id') id: string,
+        @Body() amount: number): Promise<Bank> {
 
         return this.bankService.collectMoney(id, amount)
     }
 
 
     @Patch('/:id')
-    async updateDetails(@Param('id')
-    @Body() id, amount) {
+    async updateDetails(@Param('id') id, @Body() { amount }) {
         return this.bankService.updateDetails(id, amount)
     }
 
