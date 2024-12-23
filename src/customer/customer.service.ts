@@ -33,22 +33,23 @@ export class CustomerService {
 
         const customer = await this.customerModule.create({
             customerName,
-            // accountNumber,
             address,
             phone,
 
         })
+
         await customer.save()
         return customer;
     }
-
+    async populate(id): Promise<Customer> {
+        const customerPopulate = (await this.customerModule.findById(id)).populate('Account, customerName')
+        return customerPopulate
+    }
     async deposit(depositDto: DepositDto, id: string, amount: number, idS: string, idR: string): Promise<any> {
         const { deposit } = depositDto;
 
-
         const sender = await this.sharedService.checkAccount(idS);
         const receiver = await this.sharedService.checkAccount(idR);
-
 
         const trans = await this.bankService.transactionDep(amount, id, deposit, idR, idS, receiver.balance);
 
