@@ -29,12 +29,12 @@ export class CustomerController {
 
 
     @Post(':id/deposit')
-    async depoistCredit(@Param('id')
-    @Body() depositDto: WithDrawDto,
-        @Body() id: TransactionDto,): Promise<any> {
-
-        return this.customerService.withdraw(depositDto, id)
+    async depositCredit(@Param('id') id: string,
+        @Body() depositDto: DepositDto,
+        @Body() amount: number): Promise<any> {
+        return this.customerService.deposit(depositDto, id, amount, depositDto.idS, depositDto.idR);
     }
+
 
     @Post(':id/withdraw')
     async withDrawCredit(@Param('id')

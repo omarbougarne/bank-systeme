@@ -7,9 +7,9 @@ export class CreateCustomerDto {
     @IsString()
     customerName: string;
 
-    @IsNotEmpty()
-    @IsString()
-    AccountNumber: string;
+
+
+    // accountNumber: string;
 
     @IsNotEmpty()
     @IsString()

@@ -5,7 +5,7 @@ export class DepositDto {
 
     @IsNotEmpty()
     @IsNumber()
-    deposit: number;
+    deposit: string;
 
     idR: string;
     idS: string;

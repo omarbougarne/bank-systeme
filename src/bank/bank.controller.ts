@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { BankService } from './bank.service';
 import { Bank } from './schema/bank.schema';
+import { CreateBankDto } from './dto/create-bank.dto';
 
 @Controller('bank')
 export class BankController {
@@ -9,7 +10,10 @@ export class BankController {
         private bankService: BankService
     ) { }
 
-    // @Get('/')
+    @Post('/')
+    async createBank(@Body() createBank: CreateBankDto) {
+        return this.bankService.createBank(createBank)
+    }
 
     @Post(':id/loan')
     async giveLoan(@Param('id')

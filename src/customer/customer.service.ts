@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Customer } from './schema/customer.schema';
@@ -8,12 +8,14 @@ import { WithDrawDto } from './dto/withdraw.dto';
 import { BankService } from 'src/bank/bank.service';
 import { AccountService } from 'src/account/account.service';
 import { TransactionDto } from 'src/bank/dto/transaction.dto';
+import { SharedService } from 'src/shared/shared.service';
 @Injectable()
 export class CustomerService {
 
     constructor(@InjectModel(Customer.name) private customerModule: Model<Customer>,
         private bankService: BankService,
-        private accountService: AccountService
+
+        private sharedService: SharedService
 
     ) { }
 
@@ -27,54 +29,63 @@ export class CustomerService {
         return customer
     }
     async createAccount(createCustomer: CreateCustomerDto): Promise<Customer> {
-        const { customerName, AccountNumber, address, phone, balance } = createCustomer
+        const { customerName, address, phone } = createCustomer
 
         const customer = await this.customerModule.create({
             customerName,
-            AccountNumber,
+            // accountNumber,
             address,
             phone,
-            balance
 
         })
         await customer.save()
         return customer;
     }
 
-    async deposit(depositDto: DepositDto, id: TransactionDto): Promise<any> {
-        const { deposit, idR, idS } = depositDto
-        const sender = this.accountService.checkAccount(idS);
-        const receiver = this.accountService.checkAccount(idR);
+    async deposit(depositDto: DepositDto, id: string, amount: number, idS: string, idR: string): Promise<any> {
+        const { deposit } = depositDto;
 
-        const trans = this.bankService.transactionDep(id, deposit, sender, receiver)
 
-        return trans
+        const sender = await this.sharedService.checkAccount(idS);
+        const receiver = await this.sharedService.checkAccount(idR);
+
+
+        const trans = await this.bankService.transactionDep(amount, id, deposit, idR, idS, receiver.balance);
+
+        return trans;
     }
+
     async withdraw(withdrawDto: WithDrawDto, id: TransactionDto): Promise<any> {
         const { withdraw, idR, idS } = withdrawDto;
-        const sender = this.accountService.checkAccount(idS);
-        const receiver = this.accountService.checkAccount(idR);
+        const sender = this.sharedService.checkAccount(idS);
+        const receiver = this.sharedService.checkAccount(idR);
 
         const trans = this.bankService.transactionWith(id, withdraw, sender, receiver)
 
-        return trans
+        const bank = (await this.customerModule.findById(id)).populate('bank')
+
+        return { trans, bank }
     }
 }
-// async deposit({ deposit, id }: DepositDto): Promise<Customer> {
 
-//     const { balance } = await this.customerModule.findById(id);
-//     const newBalance = deposit + balance;
-//     const customer = await this.customerModule.findByIdAndUpdate(id, { balance: newBalance }, { new: true })
 
-//     return customer;
-// }
 
-// async withdraw({ withdraw, id }: WithDrawDto): Promise<Customer> {
-// const { balance } = await this.customerModule.findById(id);
-// const newBalance = balance - withdraw;
-// const customer = await this.customerModule.findByIdAndUpdate(id, { balance: newBalance }, { new: true })
 
-// return customer;
-// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

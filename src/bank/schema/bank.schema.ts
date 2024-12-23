@@ -7,6 +7,9 @@ Schema({
 })
 export class Bank {
 
+
+    @Prop({})
+    bankName: string
     @Prop({})
     lonDetails: string;
 
@@ -19,7 +22,7 @@ export class Bank {
     @Prop({})
     transTime: Date;
 
-    @Prop({ type: [{ type: Types.ObjectId, ref: 'Customer' }], required: false })
+    @Prop({ type: [{ type: Types.ObjectId, ref: 'Customer' }], required: false, unique: false })
     customerDetails: Customer;
 
 
