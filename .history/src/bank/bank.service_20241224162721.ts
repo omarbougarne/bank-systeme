@@ -13,8 +13,8 @@ export class BankService {
         private accountService: AccountService
     ) { }
 
-    async createBank(bankName: string): Promise<Bank> {
-        const create = new this.bankModule({
+    async createBank({ bankName }: CreateBankDto) {
+        const create = await this.bankModule.create({
             bankName,
         })
 

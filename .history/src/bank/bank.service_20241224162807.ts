@@ -13,7 +13,7 @@ export class BankService {
         private accountService: AccountService
     ) { }
 
-    async createBank(bankName: string): Promise<Bank> {
+    async createBank({ bankName }: CreateBankDto) {
         const create = new this.bankModule({
             bankName,
         })

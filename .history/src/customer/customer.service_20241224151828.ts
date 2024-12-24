@@ -42,6 +42,8 @@ export class CustomerService implements OnModuleInit {
 
         })
         const account = await this.accountService.makeAccount(customerName, accountNumber, balance)
+        console.log(balance)
+        console.log(account)
         await customer.save()
 
 

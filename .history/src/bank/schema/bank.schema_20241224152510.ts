@@ -8,7 +8,7 @@ Schema({
 export class Bank {
 
 
-    @Prop({ required: true, unique: true })
+    @Prop({})
     bankName: string
 
     @Prop({})
