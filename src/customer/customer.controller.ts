@@ -23,8 +23,8 @@ export class CustomerController {
     }
 
     @Post('/')
-    createCustomer(@Body() createCustomer: CreateCustomerDto) {
-        return this.customerService.createAccount(createCustomer);
+    createCustomer(@Body() createCustomer: CreateCustomerDto, balance) {
+        return this.customerService.createAccount(createCustomer, balance);
     }
 
 

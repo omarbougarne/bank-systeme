@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Customer } from './schema/customer.schema';
@@ -8,16 +8,23 @@ import { WithDrawDto } from './dto/withdraw.dto';
 import { BankService } from 'src/bank/bank.service';
 import { AccountService } from 'src/account/account.service';
 import { TransactionDto } from 'src/bank/dto/transaction.dto';
-import { SharedService } from 'src/shared/shared.service';
+import { ModuleRef } from '@nestjs/core';
+import { async } from 'rxjs';
 @Injectable()
-export class CustomerService {
+export class CustomerService implements OnModuleInit {
 
+    private accountService: AccountService;
     constructor(@InjectModel(Customer.name) private customerModule: Model<Customer>,
         private bankService: BankService,
-
-        private sharedService: SharedService
+        private moduleRef: ModuleRef
 
     ) { }
+    onModuleInit() {
+        throw new Error('Method not implemented.');
+    }
+    OnModuleInit() {
+        this.accountService = this.moduleRef.get(AccountService);
+    }
 
     async getCustomers(): Promise<Customer[]> {
         const customers = await this.customerModule.find()
@@ -28,28 +35,28 @@ export class CustomerService {
         const customer = await this.customerModule.findById(id)
         return customer
     }
-    async createAccount(createCustomer: CreateCustomerDto): Promise<Customer> {
-        const { customerName, address, phone } = createCustomer
+    async createAccount(createCustomer: CreateCustomerDto, balance): Promise<Customer> {
+        const { customerName, accountNumber, address, phone } = createCustomer
 
         const customer = await this.customerModule.create({
             customerName,
+            accountNumber,
             address,
             phone,
 
         })
 
         await customer.save()
+
+        this.accountService.makeAccount(customerName, accountNumber, { balance })
         return customer;
     }
-    async populate(id): Promise<Customer> {
-        const customerPopulate = (await this.customerModule.findById(id)).populate('Account, customerName')
-        return customerPopulate
-    }
+
     async deposit(depositDto: DepositDto, id: string, amount: number, idS: string, idR: string): Promise<any> {
         const { deposit } = depositDto;
 
-        const sender = await this.sharedService.checkAccount(idS);
-        const receiver = await this.sharedService.checkAccount(idR);
+        const sender = await this.accountService.checkAccount(idS);
+        const receiver = await this.accountService.checkAccount(idR);
 
         const trans = await this.bankService.transactionDep(amount, id, deposit, idR, idS, receiver.balance);
 
@@ -58,8 +65,8 @@ export class CustomerService {
 
     async withdraw(withdrawDto: WithDrawDto, id: TransactionDto): Promise<any> {
         const { withdraw, idR, idS } = withdrawDto;
-        const sender = this.sharedService.checkAccount(idS);
-        const receiver = this.sharedService.checkAccount(idR);
+        const sender = this.accountService.checkAccount(idS);
+        const receiver = this.accountService.checkAccount(idR);
 
         const trans = this.bankService.transactionWith(id, withdraw, sender, receiver)
 

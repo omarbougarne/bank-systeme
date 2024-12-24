@@ -8,11 +8,10 @@ import { BankService } from 'src/bank/bank.service';
 import { AccountService } from 'src/account/account.service';
 import { BankSchema } from 'src/bank/schema/bank.schema';
 import { AccountModule } from 'src/account/account.module';
-import { SharedService } from 'src/shared/shared.service';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'Customer', schema: CustomerSchema }, { name: 'Account', schema: AccountSchema }, { name: 'Bank', schema: BankSchema }])],
   controllers: [CustomerController],
-  providers: [CustomerService, BankService, AccountService, SharedService]
+  providers: [CustomerService, BankService]
 })
 export class CustomerModule { }
