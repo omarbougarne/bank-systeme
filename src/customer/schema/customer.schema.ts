@@ -13,7 +13,6 @@ export class Customer {
     @Prop({ required: false })
     customerName: string;
 
-
     @Prop({ required: true })
     address: string;
 
@@ -25,8 +24,6 @@ export class Customer {
 
     @Prop({ type: [{ type: Types.ObjectId, ref: 'Bank' }] })
     bank: Bank
-
-
 
 
 }

@@ -9,7 +9,7 @@ import { BankService } from 'src/bank/bank.service';
 import { AccountService } from 'src/account/account.service';
 import { TransactionDto } from 'src/bank/dto/transaction.dto';
 import { ModuleRef } from '@nestjs/core';
-import { async } from 'rxjs';
+import { CreateAccountDto } from 'src/bank/dto/create-account.dto';
 @Injectable()
 export class CustomerService implements OnModuleInit {
 
@@ -20,9 +20,6 @@ export class CustomerService implements OnModuleInit {
 
     ) { }
     onModuleInit() {
-        throw new Error('Method not implemented.');
-    }
-    OnModuleInit() {
         this.accountService = this.moduleRef.get(AccountService);
     }
 
@@ -45,10 +42,12 @@ export class CustomerService implements OnModuleInit {
             phone,
 
         })
-
+        const account = await this.accountService.makeAccount(customerName, accountNumber, balance)
+        console.log(balance)
+        console.log(account)
         await customer.save()
 
-        this.accountService.makeAccount(customerName, accountNumber, { balance })
+
         return customer;
     }
 

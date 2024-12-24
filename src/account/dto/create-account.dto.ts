@@ -1,5 +1,5 @@
-import { Customer } from "src/customer/schema/customer.schema";
+// import { Customer } from "src/customer/schema/customer.schema";
 
-export class CreatAccountDto {
-    balance: number;
-}
+// export class CreatAccountDto {
+//     balance: number;
+// }

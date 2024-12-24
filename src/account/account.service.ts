@@ -1,16 +1,14 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Account } from './schema/account.schema';
-import { CreatAccountDto } from './dto/create-account.dto';
+// import { CreatAccountDto } from './dto/create-account.dto';
 import { CustomerService } from 'src/customer/customer.service';
 
 @Injectable()
 export class AccountService {
 
-    constructor(@InjectModel(Account.name) private accountModule: Model<Account>,
-        @Inject(forwardRef(() => CustomerService))
-        private customerService: CustomerService,
+    constructor(@InjectModel(Account.name) private accountModule: Model<Account>
     ) { }
 
     getAccounts() {
@@ -25,14 +23,12 @@ export class AccountService {
         this.accountModule.findByIdAndUpdate(id, { balance: updatedBalance })
     }
 
-    // checkAccount(id: string) {
-    //     return this.accountModule.findById(id);
-    // }
 
-    async makeAccount(accountNo, customerName, { balance }: CreatAccountDto,) {
 
-        const account = (await this.accountModule.create({ accountNo, customerName, balance }))
-        await account.populate('customer');
+    async makeAccount(customerName, accountNo, balance) {
+
+        const account = new this.accountModule({ customerName, accountNo, balance })
+        await account.populate('customerName');
         await account.save()
         return account
     }

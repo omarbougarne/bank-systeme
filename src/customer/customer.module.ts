@@ -12,6 +12,6 @@ import { AccountModule } from 'src/account/account.module';
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'Customer', schema: CustomerSchema }, { name: 'Account', schema: AccountSchema }, { name: 'Bank', schema: BankSchema }])],
   controllers: [CustomerController],
-  providers: [CustomerService, BankService]
+  providers: [CustomerService, BankService, AccountService]
 })
 export class CustomerModule { }

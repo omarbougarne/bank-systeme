@@ -8,10 +8,10 @@ export class Account {
     @Prop({ required: true, unique: true })
     accountNo: string
 
-    @Prop({ type: [{ type: Types.ObjectId, ref: 'Customer' }], required: true })
-    customerName: Customer
+    @Prop({ required: true })
+    customerName: string
 
-    @Prop({ required: true, unique: false, dafault: true })
+    @Prop({ required: false, unique: false, dafault: true })
     balance: number;
 }
 

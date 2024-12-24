@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { BankModule } from './bank.module';
 import { InjectModel } from '@nestjs/mongoose';
 import { Bank } from './schema/bank.schema';
 import { Model } from 'mongoose';
