@@ -4,33 +4,21 @@ import { Bank } from './schema/bank.schema';
 import { Model } from 'mongoose';
 import { TransactionDto } from './dto/transaction.dto';
 import { AccountService } from 'src/account/account.service';
-import { ModuleRef } from '@nestjs/core';
-import { CustomerService } from 'src/customer/customer.service';
 
 @Injectable()
 export class BankService {
-    private customerService: CustomerService;
+
     constructor(@InjectModel(Bank.name) private bankModule: Model<Bank>,
-        private accountService: AccountService,
-        private moduleRef: ModuleRef,
-
-
+        private accountService: AccountService
     ) { }
-    onModuleInit() {
-        this.customerService = this.moduleRef.get(CustomerService);
-    }
 
     async createBank(bankName: string): Promise<Bank> {
-        const customers = await this.customerService.getCustomers()
-        console.log(customers);
-        const bank = new this.bankModule({
+        const create = new this.bankModule({
             bankName,
-            customerD: customers
         })
 
-        bank.save();
-        return bank.populate('customerD');
-        // return bank;
+        await create.save()
+        return create
     }
     async giveLoan(id, amount): Promise<Bank> {
         const account = await this.accountService.checkAccount(id)

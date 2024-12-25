@@ -21,17 +21,25 @@ export class BankService {
     }
 
     async createBank(bankName: string): Promise<Bank> {
-        const customers = await this.customerService.getCustomers()
-        console.log(customers);
+        // Fetch all customers
+        const customers = await this.customerService.getCustomers();
+
+        // Extract only the IDs of the customers
+        const customerIds = customers.map(customer => customer._id);
+
+        // Create a new bank instance
         const bank = new this.bankModule({
             bankName,
-            customerD: customers
-        })
+            customerD: customerIds,
+        });
 
-        bank.save();
-        return bank.populate('customerD');
-        // return bank;
+        // Save the bank to the database
+        await bank.save();
+
+        // Populate and return the saved bank with customer details
+        return this.bankModule.findById(bank._id).populate('customerD').exec();
     }
+
     async giveLoan(id, amount): Promise<Bank> {
         const account = await this.accountService.checkAccount(id)
         const updatedBalance = account.balance + amount

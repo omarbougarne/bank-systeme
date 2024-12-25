@@ -25,7 +25,7 @@ export class Bank {
     // transTime: Date;
 
     @Prop({ type: [{ type: Types.ObjectId, ref: 'Customer' }] })
-    customerD: Types.ObjectId[];
+    customerDetails: Types.ObjectId[];
 
 
 

@@ -12,7 +12,7 @@ export class BankController {
 
     @Post('/')
     async createBank(@Body() bankName): Promise<Bank> {
-        return this.bankService.createBank(bankName)
+        return this.bankService.createBank(bankName,)
     }
 
     @Post(':id/loan')

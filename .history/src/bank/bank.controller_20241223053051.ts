@@ -11,8 +11,8 @@ export class BankController {
     ) { }
 
     @Post('/')
-    async createBank(@Body() bankName): Promise<Bank> {
-        return this.bankService.createBank(bankName)
+    async createBank(@Body() createBank: CreateBankDto) {
+        return this.bankService.createBank(createBank)
     }
 
     @Post(':id/loan')
@@ -25,6 +25,7 @@ export class BankController {
     @Post(':id/collect')
     async collectMoney(@Param('id') id: string,
         @Body() amount: number): Promise<Bank> {
+
         return this.bankService.collectMoney(id, amount)
     }
 

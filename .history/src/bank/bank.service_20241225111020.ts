@@ -7,7 +7,7 @@ import { AccountService } from 'src/account/account.service';
 import { ModuleRef } from '@nestjs/core';
 import { CustomerService } from 'src/customer/customer.service';
 
-@Injectable()
+@Injectable
 export class BankService {
     private customerService: CustomerService;
     constructor(@InjectModel(Bank.name) private bankModule: Model<Bank>,
@@ -20,17 +20,16 @@ export class BankService {
         this.customerService = this.moduleRef.get(CustomerService);
     }
 
-    async createBank(bankName: string): Promise<Bank> {
+    async createBank(bankName: string, customerD): Promise<Bank> {
         const customers = await this.customerService.getCustomers()
         console.log(customers);
         const bank = new this.bankModule({
             bankName,
             customerD: customers
         })
-
+        bank.populate('customerD');
         bank.save();
-        return bank.populate('customerD');
-        // return bank;
+        return bank;
     }
     async giveLoan(id, amount): Promise<Bank> {
         const account = await this.accountService.checkAccount(id)

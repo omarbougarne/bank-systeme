@@ -22,15 +22,16 @@ export class BankService {
 
     async createBank(bankName: string): Promise<Bank> {
         const customers = await this.customerService.getCustomers()
-        console.log(customers);
-        const bank = new this.bankModule({
+        const create = await this.bankModule.create({
             bankName,
-            customerD: customers
+            customerDetails: customers
         })
+        await create.save()
+        const populate = await create.populate('customerDetails')
 
-        bank.save();
-        return bank.populate('customerD');
-        // return bank;
+
+        console.log(create);
+        return populate
     }
     async giveLoan(id, amount): Promise<Bank> {
         const account = await this.accountService.checkAccount(id)

@@ -29,8 +29,7 @@ export class BankService {
         })
 
         bank.save();
-        return bank.populate('customerD');
-        // return bank;
+        return bank;
     }
     async giveLoan(id, amount): Promise<Bank> {
         const account = await this.accountService.checkAccount(id)

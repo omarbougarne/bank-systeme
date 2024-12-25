@@ -25,7 +25,7 @@ export class BankService {
         console.log(customers);
         const bank = new this.bankModule({
             bankName,
-            customerD: customers
+            // customerD: customers
         })
 
         bank.save();

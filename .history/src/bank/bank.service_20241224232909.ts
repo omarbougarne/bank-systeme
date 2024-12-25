@@ -20,17 +20,21 @@ export class BankService {
         this.customerService = this.moduleRef.get(CustomerService);
     }
 
-    async createBank(bankName: string): Promise<Bank> {
+    async createBank(bankName: string, customerDetails: [any]): Promise<Bank> {
         const customers = await this.customerService.getCustomers()
         console.log(customers);
-        const bank = new this.bankModule({
+        const create = await this.bankModule.create({
             bankName,
-            customerD: customers
+            customerDetails: customers
         })
+        const populate = await this.bankModule.find().populate('customerDetails');
 
-        bank.save();
-        return bank.populate('customerD');
-        // return bank;
+        await create.save()
+
+
+
+        console.log(populate);
+        return create
     }
     async giveLoan(id, amount): Promise<Bank> {
         const account = await this.accountService.checkAccount(id)
