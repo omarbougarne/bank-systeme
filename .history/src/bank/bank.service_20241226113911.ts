@@ -21,12 +21,13 @@ export class BankService {
     }
 
     async createBank(bankName: string): Promise<Bank> {
-
+        const customers = await this.customerService.getCustomers()
+        console.log(customers);
         const bank = new this.bankModel({
-            bankName: 'dfghjk'
+            bankName
         })
         await bank.save();
-        return bank
+        return bank.populate('customerD');
         // return bank;
     }
     async giveLoan(id, amount): Promise<Bank> {

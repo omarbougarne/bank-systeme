@@ -9,7 +9,7 @@ import { CustomerService } from 'src/customer/customer.service';
 import { AccountService } from 'src/account/account.service';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Bank.name, schema: BankSchema }, { name: 'Customer', schema: CustomerSchema }, { name: 'Account', schema: AccountSchema }])],
+  imports: [MongooseModule.forFeature([{ name: 'Customer', schema: CustomerSchema }, { name: 'Account', schema: AccountSchema }])],
   controllers: [BankController],
   providers: [BankService, AccountService, CustomerService]
 })

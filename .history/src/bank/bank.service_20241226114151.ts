@@ -23,7 +23,7 @@ export class BankService {
     async createBank(bankName: string): Promise<Bank> {
 
         const bank = new this.bankModel({
-            bankName: 'dfghjk'
+            bankName
         })
         await bank.save();
         return bank

@@ -10,7 +10,7 @@ import { CustomerService } from 'src/customer/customer.service';
 @Injectable()
 export class BankService {
     private customerService: CustomerService;
-    constructor(@InjectModel(Bank.name) private bankModel: Model<Bank>,
+    constructor(@InjectModel(Bank.name) private bankModule: Model<Bank>,
         private accountService: AccountService,
         private moduleRef: ModuleRef,
 
@@ -21,12 +21,14 @@ export class BankService {
     }
 
     async createBank(bankName: string): Promise<Bank> {
-
-        const bank = new this.bankModel({
-            bankName: 'dfghjk'
+        const customers = await this.customerService.getCustomers()
+        console.log(customers);
+        const bank = new this.bankModule({
+            bankName,
+            customerD: customers
         })
-        await bank.save();
-        return bank
+        bank.save();
+        return bank.populate('customerD');
         // return bank;
     }
     async giveLoan(id, amount): Promise<Bank> {
@@ -34,7 +36,7 @@ export class BankService {
         const updatedBalance = account.balance + amount
         this.accountService.updateAccount(id, updatedBalance);
 
-        const loan = await this.bankModel.findByIdAndUpdate(id, { lonDetails: updatedBalance }, { new: true });
+        const loan = await this.bankModule.findByIdAndUpdate(id, { lonDetails: updatedBalance }, { new: true });
         return loan
     }
 
@@ -43,14 +45,14 @@ export class BankService {
         const updatedBalance = amount - account.balance
         this.accountService.updateAccount(id, updatedBalance);
 
-        const collect = await this.bankModel.findByIdAndUpdate(id, { lonDetails: updatedBalance }, { new: true });
+        const collect = await this.bankModule.findByIdAndUpdate(id, { lonDetails: updatedBalance }, { new: true });
         return collect
 
     }
 
     async updateDetails(id, balance) {
         const customer_1 = await this.accountService.checkAccount(id)
-        const update = await this.bankModel.findByIdAndUpdate(id, { balance }).populate('customerDetails')
+        const update = await this.bankModule.findByIdAndUpdate(id, { balance }).populate('customerDetails')
         return { customer_1, update }
     }
 
@@ -60,7 +62,7 @@ export class BankService {
         const receiver = await this.accountService.checkAccount(idR);
         const detailsReceiver = await this.updateDetails(idR, balance + amount);
 
-        const bank = await this.bankModel.findById(id).populate('customerDetails');
+        const bank = await this.bankModule.findById(id).populate('customerDetails');
 
         return { detailsReceiver, bank };
     }

@@ -21,9 +21,10 @@ export class BankService {
     }
 
     async createBank(bankName: string): Promise<Bank> {
-
+        const customers = await this.customerService.getCustomers()
+        console.log(customers);
         const bank = new this.bankModel({
-            bankName: 'dfghjk'
+            bankName
         })
         await bank.save();
         return bank
