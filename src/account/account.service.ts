@@ -8,27 +8,27 @@ import { CustomerService } from 'src/customer/customer.service';
 @Injectable()
 export class AccountService {
 
-    constructor(@InjectModel(Account.name) private accountModule: Model<Account>
+    constructor(@InjectModel(Account.name) private accountModel: Model<Account>
     ) { }
 
     getAccounts() {
-        return this.accountModule.find();
+        return this.accountModel.find();
 
     }
 
     checkAccount(id: string) {
-        return this.accountModule.findById(id);
+        return this.accountModel.findById(id);
     }
     updateAccount(id: string, updatedBalance: number) {
-        this.accountModule.findByIdAndUpdate(id, { balance: updatedBalance })
+        this.accountModel.findByIdAndUpdate(id, { balance: updatedBalance })
     }
 
 
 
     async makeAccount(customerName, accountNo, balance) {
 
-        const account = new this.accountModule({ customerName, accountNo, balance })
-        await account.populate('customerName');
+        const account = new this.accountModel({ customerName, accountNo, balance })
+        // await account.populate('customerName');
         await account.save()
         return account
     }

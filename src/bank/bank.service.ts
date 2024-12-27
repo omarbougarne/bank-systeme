@@ -21,19 +21,27 @@ export class BankService {
     }
 
     async createBank(bankName: string): Promise<Bank> {
-
+        const customers = await this.customerService.getCustomers();
+        const customerDetails = customers.map(customer => customer._id)
         const bank = new this.bankModel({
-            bankName: 'dfghjk'
+            bankName,
+            customerDetails
         })
         await bank.save();
-        return bank
-        // return bank;
+        return bank.populate('customerDetails')
     }
+
+    async pushCustomers() {
+        // const customers = await this.customerService.getCustomers();
+        // const pop = await this.bankModel.populate('customerDetails');
+        // await pop.save();
+
+    }
+
     async giveLoan(id, amount): Promise<Bank> {
         const account = await this.accountService.checkAccount(id)
         const updatedBalance = account.balance + amount
         this.accountService.updateAccount(id, updatedBalance);
-
         const loan = await this.bankModel.findByIdAndUpdate(id, { lonDetails: updatedBalance }, { new: true });
         return loan
     }
@@ -66,7 +74,6 @@ export class BankService {
     }
 
     async transactionWith(transactionDto: TransactionDto, idR, idS, balance): Promise<any> {
-
         const { amount } = transactionDto
         const sender = this.accountService.checkAccount(idS);
         const receiver = this.accountService.checkAccount(idR);

@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Bank } from "src/bank/schema/bank.schema";
-import { Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { type } from "os";
 import { Account } from "src/account/schema/account.schema";
 
@@ -8,7 +8,7 @@ import { Account } from "src/account/schema/account.schema";
     timestamps: true
 })
 
-export class Customer {
+export class Customer extends Document {
 
 
     @Prop({ required: false })
